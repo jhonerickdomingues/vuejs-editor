@@ -6,6 +6,8 @@
                 <option value="a5">A5</option>
             </select>
             |
+            <button @click="print">Save</button>
+            |
             <button @click="exec('italic')">Italico</button>
             <button @click="exec('bold')">Bold</button>
             <button @click="exec('underline')">Underline</button>
@@ -41,8 +43,8 @@
         </div>
         <hr>
         <div id="documento">
-            {{ num }}
-            <div :class="tipo_folha_obj" ref="editor" id="editor" rows="5" contenteditable="" @input="updateHTML"></div>
+            <div :class="tipo_folha_obj" ref="editor" id="editor" rows="5" contenteditable="" @input="updateHTML">
+            </div>
         </div>
     </div>
 </template>
@@ -52,6 +54,7 @@
         name: "Editor",
         data(){
             return {
+                divisor:297,
                 value:null,
                 html:'null',
                 image:{
@@ -66,6 +69,9 @@
             };
         },
         methods:{
+            print(){
+                window.print();
+            },
             exec( command, value = null ){
                 document.execCommand(command, false, value);
             },
@@ -78,14 +84,16 @@
                     this.$nextTick(() => {
                         this.image.uploadRead = true
                     })
-                    this.exec('insertImage', reader.result);
                 }
             },
             updateHTML(e){
                 this.html = e.target.innerHTML;
                 let pxHeight = parseInt(e.target.offsetHeight);
                 let mmHeight = Math.floor(pxHeight * 0.264583);
-                console.log(mmHeight);
+
+                if(mmHeight <= 297){
+                    this.divisor = 297;
+                }
             },
             trocarTipoFolha(){
                 for (var key in this.tipo_folha_obj) {
@@ -131,6 +139,9 @@
 
 
     @media print {
+
+        footer {page-break-after: always;}
+
         body * {
             visibility: hidden;
             margin: 0;
@@ -143,7 +154,6 @@
             position: absolute;
             left: 0;
             top: 0;
-            height: 0;
             border: 0px solid black;
         }
     }
@@ -163,6 +173,5 @@
             size: a4;
         }
     }*/
-
 
 </style>
