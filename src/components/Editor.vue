@@ -84,6 +84,7 @@
                     this.$nextTick(() => {
                         this.image.uploadRead = true
                     })
+                    this.exec('insertImage', reader.result);
                 }
             },
             updateHTML(e){
