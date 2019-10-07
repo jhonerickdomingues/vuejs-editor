@@ -1,50 +1,49 @@
 <template>
     <div>
         <div>
-            <select v-model="tipo_folha" name="" id="" @change="trocarTipoFolha">
+            <select v-model="paper_type" name="" id="" @change="changePaperType">
                 <option value="a4">A4</option>
                 <option value="a5">A5</option>
             </select>
             |
-            <button @click="print">Save</button>
+            <button title="Save File" @click="print">Save</button>
             |
-            <button @click="exec('italic')">Italico</button>
-            <button @click="exec('bold')">Bold</button>
-            <button @click="exec('underline')">Underline</button>
+            <button title="Italic" @click="exec('italic')">Italico</button>
+            <button title="Bold" @click="exec('bold')">Bold</button>
+            <button title="Underline" @click="exec('underline')">Underline</button>
             |
-            <button @click="exec('justifyLeft')">tl</button>
-            <button @click="exec('justifyRight')">tr</button>
-            <button @click="exec('justifyCenter')">tc</button>
-            <button @click="exec('justifyFull')">tj</button>
+            <button title="Justify Left" @click="exec('justifyLeft')">tl</button>
+            <button title="Justify Right" @click="exec('justifyRight')">tr</button>
+            <button title="Justify Center" @click="exec('justifyCenter')">tc</button>
+            <button title="Justify Full" @click="exec('justifyFull')">tf</button>
             |
-            <button @click="exec('undo')">undo</button>
-            <button @click="exec('redo')">redo</button>
+            <button title="Undo" @click="exec('undo')">undo</button>
+            <button title="Redo" @click="exec('redo')">redo</button>
             |
-            <button @click="exec('insertOrderedList')">ol</button>
-            <button @click="exec('insertUnorderedList')">ul</button>
+            <button title="Ordered List" @click="exec('insertOrderedList')">ol</button>
+            <button title="Unordered List" @click="exec('insertUnorderedList')">ul</button>
             |
-            <button @click="exec('backColor', 'red')">back</button>
-            <button @click="exec('foreColor', 'red')">fore</button>
+            <button title="BackColor" @click="exec('backColor', 'red')">back</button>
+            <button title="ForColor" @click="exec('foreColor', 'red')">fore</button>
             |
             <select v-model="value" @change="exec('fontName',value)">
-                <option value="null">Selecione a fonte</option>
+                <option value="null">Select Font Style</option>
                 <option value="Arial">Arial</option>
                 <option value="Calibri">Calibri</option>
                 <option value="Comic Sans MS">Comic Sans MS</option>
             </select>
             |
-            <button>
+            <button title="Insert Image">
                 <label for="image">Img</label>
             </button>
-            <input type="file" v-if="image.uploadRead" id="image" ref="image" @change="insertImage">
+            <input  type="file" v-if="image.uploadRead" id="image" ref="image" @change="insertImage">
             |
-            <button @click="exec('formatBlock', 'h1')">h1</button>
-            <button @click="exec('formatBlock', 'h6')">h6</button>
+            <button title="H1" @click="exec('formatBlock', 'h1')">h1</button>
+            <button title="H6" @click="exec('formatBlock', 'h6')">h6</button>
         </div>
         <hr>
-        <div id="documento">
-            <div :class="tipo_folha_obj" ref="editor" id="editor" rows="5" contenteditable="" @input="updateHTML">
-            </div>
+        <div id="documentContent">
+            <div :class="paper_type_obj" ref="editor" id="editor" rows="5" contenteditable="" @input="updateHTML"></div>
         </div>
     </div>
 </template>
@@ -57,15 +56,12 @@
                 divisor:297,
                 value:null,
                 html:'null',
-                image:{
+                image: {
                     uploadRead:true,
                 },
-                tipo_folha:'a4',
-                tipo_folha_obj:{
-                    a4:true,
-                    a5:false,
-                },
-                num:0,
+                paper_type: 'a4',
+                paper_type_obj: { a4: true, a5: false, },
+                num: 0,
             };
         },
         methods:{
@@ -76,7 +72,6 @@
                 document.execCommand(command, false, value);
             },
             insertImage(){
-                //console.log(this.$refs.image.files);
                 var reader = new FileReader();
                 reader.readAsDataURL(this.$refs.image.files[0]);
                 reader.onload = () => {
@@ -96,12 +91,12 @@
                     this.divisor = 297;
                 }
             },
-            trocarTipoFolha(){
-                for (var key in this.tipo_folha_obj) {
-                    if(key == this.tipo_folha){
-                        this.tipo_folha_obj[key] = true;
-                    }else{
-                        this.tipo_folha_obj[key] = false;
+            changePaperType(){
+                for (let key in this.paper_type_obj) {
+                    if(key == this.paper_type) {
+                        this.paper_type_obj[key] = true;
+                    } else {
+                        this.paper_type_obj[key] = false;
                     }
                 }
             }
@@ -110,7 +105,7 @@
 </script>
 
 <style scoped>
-    #documento{
+    #documentContent{
         margin: 10px;
         padding: 10px;
         background: rgb(204,204,204);
