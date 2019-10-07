@@ -42,8 +42,11 @@
             <button title="H6" @click="exec('formatBlock', 'h6')">h6</button>
         </div>
         <hr>
+
         <div id="documentContent">
-            <div :class="paper_type_obj" ref="editor" id="editor" rows="5" contenteditable="" @input="updateHTML"></div>
+            <div id="preeditor">
+                <div :class="paper_type_obj" ref="editor" id="editor" rows="5" contenteditable="" @input="updateHTML"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -111,11 +114,19 @@
         background: rgb(204,204,204);
         height: 30em;
         overflow: auto;
+        position: relative;
+    }
+
+    #preeditor{
+        display: flex;
+        align-items: center;
     }
 
     #editor{
+        width: 210mm;
+        min-height: 297mm;
         background-color: white;
-        margin: 0px auto;
+        margin: 10px auto !important;
         box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
     }
 
